@@ -13,6 +13,7 @@ pipeline{
         version = readMavenPom().getVersion()
         name = readMavenPom().getName()
         groupId = readMavenPom().getGroupId()
+        packaging = readMavenPom().getPackaging()
     }
 
     stages {
@@ -48,17 +49,17 @@ pipeline{
         stage ('Publish to Nexus'){
             steps {
                     nexusArtifactUploader artifacts: 
-                        [[artifactId: '${artifactId}',
+                        [[artifactId: "${artifactId}",
                          classifier: '', 
-                         file: 'target/VinayDevOpsLab-0.0.4-SNAPSHOT.war', 
+                         file: "target/${artifactId}-${version}.${packaging}", 
                          type: 'war']], 
                          credentialsId: '713b71cb-6a1a-419b-ba8b-1530d384d211', 
-                         groupId: '${groupId}', 
+                         groupId: "${groupId}", 
                          nexusUrl: 'ec2-3-81-84-101.compute-1.amazonaws.com:8081', 
                          nexusVersion: 'nexus3', 
                          protocol: 'http', 
                          repository: 'CephDevopsLab-SNAPSHOT', 
-                         version: '${version}'
+                         version: "${version}"
             }
         }
 
