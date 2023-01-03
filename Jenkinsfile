@@ -51,7 +51,7 @@ pipeline{
                 script {
                     // This logic will make sure if version ends with SNAPSHOT then it will upload to snapshot repo
                     // else it will upload to release repo
-                    def NexusRepo = version.endswith('SNAPSHOT') ? 'CephDevopsLab-SNAPSHOT' : 'CephDevopsLab-RELEASE'
+                    def NexusRepo = version.endswith("SNAPSHOT") ? "CephDevopsLab-SNAPSHOT" : "CephDevopsLab-RELEASE"
 
                     nexusArtifactUploader artifacts: 
                         [[artifactId: "${artifactId}",
@@ -63,7 +63,7 @@ pipeline{
                          nexusUrl: 'ec2-3-81-84-101.compute-1.amazonaws.com:8081', 
                          nexusVersion: 'nexus3', 
                          protocol: 'http', 
-                         repository: NexusRepo, 
+                         repository: "${NexusRepo}", 
                          version: "${version}"
                 }
             }
