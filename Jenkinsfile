@@ -5,6 +5,15 @@ pipeline{
         maven 'Maven'
     }
 
+    environment {
+        // Specify the environment variables
+        // JAVA_HOME = '/usr/lib/jvm/java-8-openjdk-amd64'
+        // PATH = "$JAVA_HOME/bin:$PATH"
+        artifactId = readMavenPom().getArtifactId()
+        version = readMavenPom().getVersion()
+        name = readMavenPom().getName()
+    }
+
     stages {
         // Specify various stage with in stages
 
@@ -40,9 +49,17 @@ pipeline{
                     nexusArtifactUploader artifacts: [[artifactId: 'VinayDevOpsLab', classifier: '', file: 'target/VinayDevOpsLab-0.0.4-SNAPSHOT.war', type: 'war']], credentialsId: '713b71cb-6a1a-419b-ba8b-1530d384d211', groupId: 'com.vinaysdevopslab', nexusUrl: 'ec2-3-81-84-101.compute-1.amazonaws.com:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'CephDevopsLab-SNAPSHOT', version: '0.0.4-SNAPSHOT'
             }
         }
-    
 
-        // Stage3: Deploy
+        // Stage 4: to print the environment variables set above
+        stage ('Print Environment Variables'){
+            steps {
+                echo "artifactId: ${artifactId}"
+                echo "version: ${version}"
+                echo "name: ${name}"
+            }
+        }
+
+        // Stage 5: Deploy
         stage ('Deploy'){
             steps {
                 echo ' Deploying the application......'
