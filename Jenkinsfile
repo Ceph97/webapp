@@ -13,7 +13,6 @@ pipeline{
         version = readMavenPom().getVersion()
         name = readMavenPom().getName()
         groupId = readMavenPom().getGroupId()
-        packaging = readMavenPom().getPackaging()
     }
 
     stages {
@@ -51,7 +50,7 @@ pipeline{
                     nexusArtifactUploader artifacts: 
                         [[artifactId: '${artifactId}',
                          classifier: '', 
-                         file: 'target/${artifactId}-${version}.${packaging}', 
+                         file: 'target/VinayDevOpsLab-0.0.4-SNAPSHOT.war', 
                          type: 'war']], 
                          credentialsId: '713b71cb-6a1a-419b-ba8b-1530d384d211', 
                          groupId: '${groupId}', 
