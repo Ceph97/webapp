@@ -48,6 +48,11 @@ pipeline{
         // Stage3: Publish the source code to Nexus
         stage ('Publish to Nexus'){
             steps {
+                script {
+                    // This logic will make sure if version ends with SNAPSHOT then it will upload to snapshot repo
+                    // else it will upload to release repo
+                    def NexusRepo = version.endswith('SNAPSHOT') ? 'CephDevopsLab-SNAPSHOT' : 'CephDevopsLab-RELEASE'
+
                     nexusArtifactUploader artifacts: 
                         [[artifactId: "${artifactId}",
                          classifier: '', 
@@ -58,8 +63,9 @@ pipeline{
                          nexusUrl: 'ec2-3-81-84-101.compute-1.amazonaws.com:8081', 
                          nexusVersion: 'nexus3', 
                          protocol: 'http', 
-                         repository: 'CephDevopsLab-SNAPSHOT', 
+                         repository: NexusRepo, 
                          version: "${version}"
+                }
             }
         }
 
