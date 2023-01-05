@@ -79,8 +79,42 @@ pipeline{
             }
         }
 
-        // Stage 5: Deploying application to Ansible controller
+        // Stage 5: Deploying application using Ansible to Apache Tomcat
         stage ('Deploy'){
+            steps {
+                echo ' Deploying the application......'
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'Ansible_controller', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: 'ansible-playbook /opt/playbooks/downloadDeploy2.yaml -i /opt/playbooks/hosts', 
+                                    execTimeout: 120000, 
+                                    // flatten: false, 
+                                    // makeEmptyDirs: false, 
+                                    // noDefaultExcludes: false, 
+                                    // patternSeparator: '[, ]+', 
+                                    // remoteDirectory: '', 
+                                    // remoteDirectorySDF: false, 
+                                    // removePrefix: '', 
+                                    // sourceFiles: ''
+                                    )
+                            ], 
+                            usePromotionTimestamp: false, 
+                            useWorkspaceInPromotion: false, 
+                            verbose: false
+                        )
+                    ]
+                )
+            }
+        }
+
+
+        // Stage 5: Deploying to Docker
+        stage ('Deploy to Docker'){
             steps {
                 echo ' Deploying the application......'
                 sshPublisher(
